@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import moment from "moment";
 
+//création d'un component afin de l'afficher dans le searchRecette
 class RecetteItem extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +25,7 @@ class RecetteItem extends React.Component {
             <Text style={styles.nom_text}>{this.state.recette.nom}</Text>
           </View>
           <View style={styles.description_container}>
-            <Text style={styles.description_text} numberOfLines={6}>
+            <Text style={styles.description_text} numberOfLines={4}>
               {this.state.recette.description}
             </Text>
           </View>

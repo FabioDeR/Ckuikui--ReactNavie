@@ -23,6 +23,7 @@ class SearchRecette extends React.Component {
     };
   }
 
+  //charger les recette selon le mot de recherche d'user
   _loading() {
     if (this.searchedText.length > 0) {
       getallRecetteBySearch(this.searchedText)
@@ -34,6 +35,7 @@ class SearchRecette extends React.Component {
     }
   }
 
+  //affichage d'un indicateur de chargement
   _displayLoading() {
     if (this.state.isLoading) {
       return (
@@ -44,10 +46,12 @@ class SearchRecette extends React.Component {
     }
   }
 
+  //on retient le text de recherche
   _searchTextInputChanged(text) {
     this.searchedText = text;
   }
 
+  //modification du tableau recettes
   _searchrecette() {
     this.setState({
       recettes: [],
@@ -55,7 +59,6 @@ class SearchRecette extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <View style={styles.main_container}>
         <TextInput
@@ -74,7 +77,7 @@ class SearchRecette extends React.Component {
           data={this.state.recettes.data}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity
+            <TouchableOpacity //permet la saisie tactille d'une vue
               onPress={() =>
                 this.props.navigation.navigate("RecetteDetail", {
                   params: { idRecette: item.id },
@@ -104,6 +107,19 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     borderWidth: 1,
     paddingLeft: 5,
+  },
+  button: {
+    fontSize: 25,
+    alignSelf: "stretch",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "orange",
+    marginTop: 30,
+  },
+  btntext: {
+    fontSize: 25,
+    color: "orange",
+    fontWeight: "bold",
   },
 });
 

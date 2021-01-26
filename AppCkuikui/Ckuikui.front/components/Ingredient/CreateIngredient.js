@@ -1,100 +1,123 @@
 import React from "react";
+
 import {
   View,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 
-class Register extends React.Component {
+import authContext from "../auth/authContext";
+
+class IngredientCreate extends React.Component {
+  static contextType = authContext;
   constructor(props) {
     super(props);
     this.state = {
-      pseudo: "",
-      email: "",
-      password: "",
+      nom: "",
+      types: "",
+      cuisson: "",
+      photo: "",
+      UserId: "",
     };
   }
 
-  //   _test() {
-  //     fetch("http://192.168.0.5:9000/users/all")
-  //       .then((response) => response.json())
-  //       .then((data) => console.log(data))
-  //       .catch((error) => console.error(error));
-  //   }
-
-  _register(value) {
-    fetch("http://192.168.0.5:9000/users/create", {
+  componentDidMount() {
+    const { user } = this.context;
+    this.setState({
+      UserId: user.id,
+    });
+  }
+  async createIngredient(value) {
+    await fetch("http://192.168.0.5:9000/ingredients/create", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        pseudo: value.pseudo,
-        email: value.email,
-        password: value.password,
+        nom: value.nom,
+        types: value.types,
+        cuisson: value.cuisson,
+        photo: value.photo,
+        UserId: value.UserId,
       }),
     })
-      .then((response) => {
-        if (response.status == 200) {
-          this.props.navigation.navigate("Login");
-        }
-        return response.json();
+      .then((response) => response.json())
+      .then((data) => {
+        this.restorField();
+        alert(`l'ingredient ${data.data.nom} a bien été crée `);
       })
-      .then((data) => alert(data.message))
       .catch((error) => console.error(error));
+  }
+
+  restorField() {
+    this.setState({
+      nom: "",
+      types: "",
+      cuisson: "",
+      photo: "",
+    });
   }
 
   render() {
     return (
       <View style={styles.regisForm}>
-        <Text style={styles.header}>Sign Up</Text>
+        <Text style={styles.header}>Enregistrer Votre Ingredient</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="Your Pseudo"
-          value={this.state.pseudo}
+          placeholder="Name Ingredient"
+          value={this.state.nom}
           onChangeText={(text) => {
             this.setState({
-              pseudo: text,
+              nom: text,
             });
           }}
         />
         <TextInput
           style={styles.textInput}
-          placeholder="Your Email"
-          value={this.state.email}
+          placeholder="Type of Ingredient"
+          value={this.state.types}
           onChangeText={(text) => {
             this.setState({
-              email: text,
+              types: text,
             });
           }}
         />
         <TextInput
           style={styles.textInput}
-          placeholder="Your Password"
-          value={this.state.password}
-          secureTextEntry
+          placeholder="Type of Cuisson "
+          value={this.state.cuisson}
           onChangeText={(text) => {
             this.setState({
-              password: text,
+              cuisson: text,
+            });
+          }}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Photo"
+          value={this.state.photo}
+          onChangeText={(text) => {
+            this.setState({
+              photo: text,
             });
           }}
         />
         <TouchableOpacity
           style={styles.button}
           onPress={(_) => {
-            this._register(this.state);
+            this.createIngredient(this.state);
+            //console.log("bonjour");
           }}
         >
-          <Text Style={styles.btntext}>Sign up</Text>
+          <Text Style={styles.btntext}>Create</Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
-
 const styles = StyleSheet.create({
   regisForm: {
     flex: 1,
@@ -102,7 +125,7 @@ const styles = StyleSheet.create({
     padding: 35,
   },
   header: {
-    fontSize: 35,
+    fontSize: 25,
     color: "#FFAE00",
     paddingBottom: 10,
     marginBottom: 40,
@@ -131,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default IngredientCreate;
